@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useState,} from "react";
 import {Button,Box,Typography,TextField,InputAdornment,IconButton} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useAppDispatch ,useAppSelector,type RootState} from "@/store/store";
+import { login } from "@/store/auth/auth.thunk";
 import Spinner from "@/common/suspense/Spinner";
 import bg from "../../assets/tim-van-der-kuip-CPs2X8JYmS8-unsplash.jpg";
 import Logo from "../../assets/track3.svg";
 
+
 const LoginPage = () => {
+  const auth=useAppSelector((state:RootState)=>state.auth);
+  const dispatch=useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,19 +19,14 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const emailid = "vimalraj.s@hepl.com";
-  const currentpassword = "QT@123";
 
-  const handleLogin = () => {
-    if (email === emailid && password === currentpassword) {
-      setError("");
-      setLoading(true);
-      setTimeout(() => {
-        localStorage.setItem("token", "123");
-        navigate("/dashboard", { replace: true });
-      }, 500);
-    } else {
-      setError("Invalid email or password");
+  const handleLogin = async() => {
+    setLoading(true);
+    try{
+      await dispatch(login({email,password})).unwrap();
+      navigate("/dashboard",{replace:true})
+    }catch(error:any){
+setError(error.message||"Invalid email or password")
     }
   };
 
@@ -191,7 +191,7 @@ const LoginPage = () => {
                 mt: 2,
                 backgroundColor: "#00b894",
                 color: "white",
-                borderRadius: "6px",
+                borderRadius:2,
                 textTransform: "none",
                 height: 40,
                 "&:hover": { backgroundColor: "#066d5c" },
