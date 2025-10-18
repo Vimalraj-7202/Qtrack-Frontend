@@ -8,7 +8,6 @@ const Settings = () => {
         title="Settings"
         subTitle="Update your profile and preferences."
       />
-
       <TextField>Name</TextField>
       <TextField>Email</TextField>
     </>
