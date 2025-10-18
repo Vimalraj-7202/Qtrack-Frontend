@@ -19,15 +19,33 @@ interface AuthState {
   data: any;
 }
 
-// Helper to get item from localStorage safely
-const getLocalItem = (key: string) =>
-  typeof window !== "undefined" ? localStorage.getItem(key) : null;
+// Safe localStorage getter
+const getLocalItem = (key: string) => {
+  if (typeof window === "undefined") return null;
+  const item = localStorage.getItem(key);
+  if (!item || item === "undefined") return null;
+  try {
+    return JSON.parse(item);
+  } catch {
+    return null;
+  }
+};
+
+// Helper to save auth data
+const saveAuthToLocal = (user: User, token: string) => {
+  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem("token", JSON.stringify(token));
+};
+
+// Helper to clear auth data
+const clearAuthFromLocal = () => {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+};
 
 const initialState: AuthState = {
-  user: getLocalItem("user")
-    ? JSON.parse(getLocalItem("user") as string)
-    : null,
-  token: getLocalItem("token"),
+  user: getLocalItem("user"),
+  token: getLocalItem("token") as string | null,
   users: [],
   loading: false,
   error: null,
@@ -39,7 +57,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    // Update only user info
     setUser: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
       if (action.payload) {
@@ -48,26 +65,22 @@ const authSlice = createSlice({
         localStorage.removeItem("user");
       }
     },
-    // Set both user and token (for hydration or login)
     setAuth: (state, action: PayloadAction<{ user: User; token: string }>) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
+      const { user, token } = action.payload;
+      state.user = user;
+      state.token = token;
       state.isAuthenticated = true;
-
-      localStorage.setItem("user", JSON.stringify(action.payload.user));
-      localStorage.setItem("token", action.payload.token);
+      saveAuthToLocal(user, token);
     },
-    // Logout clears everything
     logout: (state) => {
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      clearAuthFromLocal();
     },
   },
   extraReducers: (builder) => {
-    // LOGIN USER
+    // LOGIN
     builder.addCase(login.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -76,20 +89,19 @@ const authSlice = createSlice({
       login.fulfilled,
       (state, action: PayloadAction<{ user: User; token: string }>) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        const { user, token } = action.payload;
+        state.user = user;
+        state.token = token;
         state.isAuthenticated = true;
-
-        localStorage.setItem("user", JSON.stringify(action.payload.user));
-        localStorage.setItem("token", action.payload.token);
+        saveAuthToLocal(user, token);
       }
     );
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload as string;
+      state.error = action.error.message || "Login failed";
     });
 
-    // REGISTER USER
+    // REGISTER
     builder.addCase(register.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -98,17 +110,16 @@ const authSlice = createSlice({
       register.fulfilled,
       (state, action: PayloadAction<{ user: User; token: string }>) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        const { user, token } = action.payload;
+        state.user = user;
+        state.token = token;
         state.isAuthenticated = true;
-
-        localStorage.setItem("user", JSON.stringify(action.payload.user));
-        localStorage.setItem("token", action.payload.token);
+        saveAuthToLocal(user, token);
       }
     );
     builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload as string;
+      state.error = action.error.message || "Registration failed";
     });
   },
 });
