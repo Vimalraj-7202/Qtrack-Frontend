@@ -1,17 +1,24 @@
-import { useState,} from "react";
-import {Button,Box,Typography,TextField,InputAdornment,IconButton} from "@mui/material";
+import { useState } from "react";
+import {
+  Button,
+  Box,
+  Typography,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useAppDispatch ,useAppSelector,type RootState} from "@/store/store";
+import { useAppDispatch, useAppSelector, type RootState } from "@/store/store";
 import { login } from "@/store/auth/auth.thunk";
 import Spinner from "@/common/suspense/Spinner";
 import bg from "../../assets/tim-van-der-kuip-CPs2X8JYmS8-unsplash.jpg";
 import Logo from "../../assets/track3.svg";
 
-
 const LoginPage = () => {
-  const auth=useAppSelector((state:RootState)=>state.auth);
-  const dispatch=useAppDispatch();
+  const auth = useAppSelector((state: RootState) => state.auth);
+  console.log(auth);
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,14 +26,20 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-
-  const handleLogin = async() => {
+  const handleLogin = async () => {
     setLoading(true);
-    try{
-      await dispatch(login({email,password})).unwrap();
-      navigate("/dashboard",{replace:true})
-    }catch(error:any){
-setError(error.message||"Invalid email or password")
+    setError("");
+    try {
+      await dispatch(login({ email, password })).unwrap();
+      navigate("/dashboard", { replace: true });
+    } catch (error: any) {
+      setError(
+        typeof error === "string"
+          ? error
+          : error?.message || "Invalid email or password"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -191,7 +204,7 @@ setError(error.message||"Invalid email or password")
                 mt: 2,
                 backgroundColor: "#00b894",
                 color: "white",
-                borderRadius:2,
+                borderRadius: 2,
                 textTransform: "none",
                 height: 40,
                 "&:hover": { backgroundColor: "#066d5c" },
