@@ -1,68 +1,82 @@
 import CommonTitle from "@/common/Title";
-import { useState } from "react";
-import {Box,Button,Table,TableHead,TableBody,TableRow,TableCell,TextField,Paper,Typography} from "@mui/material";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector, type RootState } from "@/store/store";
+import { newRequest, getAllRequests } from "@/store/request/request.thunk";
+import {
+  Box,
+  Button,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TextField,
+  Paper,
+  Typography,
+} from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
+// Type for a single row
 type RequestRow = {
   FYEAR: string;
   Month: string;
+  QC: string;
   Plant: string;
   Division: string;
-  Category?: string;
-  Channel: string;
-  DBCode: string;
+  Category: string;
+  QTCode: string;
   Location: string;
   State: string;
   Amount: number | "";
-  Extra1: string;
-  Extra2: string;
-  Extra3: string;
-  Extra4: string;
-  Extra5: string;
 };
 
+// Headers for table
 const headers: (keyof RequestRow)[] = [
   "FYEAR",
   "Month",
+  "QC",
   "Plant",
   "Division",
   "Category",
-  "Channel",
-  "DBCode",
+  "QTCode",
   "Location",
   "State",
   "Amount",
-  "Extra1",
-  "Extra2",
-  "Extra3",
-  "Extra4",
-  "Extra5"];
+];
+
+// Initial row state
+const initialRowState: RequestRow = {
+  FYEAR: "",
+  Month: "",
+  QC: "",
+  Plant: "",
+  Division: "",
+  Category: "",
+  QTCode: "",
+  Location: "",
+  State: "",
+  Amount: "",
+};
 
 const Request = () => {
-  const [newRow, setNewRow] = useState<RequestRow>({
-    FYEAR: "",
-    Month: "",
-    Plant: "",
-    Division: "",
-    Category: "",
-    Channel: "",
-    DBCode: "",
-    Location: "",
-    State: "",
-    Amount: "",
-    Extra1: "",
-    Extra2: "",
-    Extra3: "",
-    Extra4: "",
-    Extra5: "",
-  });
-
+  const dispatch = useAppDispatch();
+  const data = useAppSelector((state: RootState) => state.request);
+  console.log(data, "dataaaaaaa");
+  const [newRow, setNewRow] = useState<RequestRow>({ ...initialRowState });
   const [editable, setEditable] = useState(false);
   const [isContinueEnabled, setIsContinueEnabled] = useState(false);
   const [showUploadSection, setShowUploadSection] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
+  useEffect(() => {
+    dispatch(getAllRequests() as any);
+  }, [dispatch]);
+
+
+  // Enable editing
   const handleNewRequest = () => setEditable(true);
+
+  // Update input fields
   const handleInputChange = (
     field: keyof RequestRow,
     value: string | number
@@ -77,30 +91,42 @@ const Request = () => {
     });
   };
 
+  // Reset form
   const handleCancel = () => {
-    setNewRow({
-      FYEAR: "",
-      Month: "",
-      Plant: "",
-      Division: "",
-      Category: "",
-      Channel: "",
-      DBCode: "",
-      Location: "",
-      State: "",
-      Amount: "",
-      Extra1: "",
-      Extra2: "",
-      Extra3: "",
-      Extra4: "",
-      Extra5: "",
-    });
+    setNewRow({ ...initialRowState });
     setEditable(false);
     setIsContinueEnabled(false);
     setShowUploadSection(false);
   };
 
   const handleContinueClick = () => setShowUploadSection(true);
+  const handleSave = async () => {
+    // Map frontend state to backend schema
+    const payload = {
+      Fyear: newRow.FYEAR,
+      month: newRow.Month,
+      QC: newRow.QC,
+      Plant: newRow.Plant,
+      Division: newRow.Division,
+      Category: newRow.Category,
+      QTCode: newRow.QTCode,
+      Location: newRow.Location,
+      State: newRow.State,
+      Amount: Number(newRow.Amount),
+    };
+
+    // Optional: check all fields filled
+    const allFilled = Object.values(payload).every(
+      (val) => val !== "" && val !== null && val !== undefined
+    );
+    if (!allFilled) {
+      alert("Please fill all fields before submitting");
+      return;
+    }
+
+    await dispatch(newRequest(payload as any));
+    handleCancel(); // reset form after submission
+  };
 
   // Drag & Drop handlers
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -169,7 +195,7 @@ const Request = () => {
                       color: "gray",
                       paddingY: 0.5,
                       paddingX: 1,
-                      textAlign: header === "Amount" ? "right" : "left",
+                      textAlign: "center",
                       borderRight:
                         idx !== headers.length - 1
                           ? "1px solid #e0e0e0"
@@ -183,6 +209,7 @@ const Request = () => {
                 ))}
               </TableRow>
             </TableHead>
+
             <TableBody>
               <TableRow>
                 {headers.map((header) => (
@@ -201,7 +228,12 @@ const Request = () => {
                     <TextField
                       value={newRow[header]}
                       onChange={(e) =>
-                        handleInputChange(header, e.target.value)
+                        handleInputChange(
+                          header,
+                          header === "Amount"
+                            ? Number(e.target.value)
+                            : e.target.value
+                        )
                       }
                       variant="standard"
                       size="small"
@@ -329,6 +361,7 @@ const Request = () => {
           ) : (
             <>
               <Button
+                onClick={handleSave}
                 sx={{
                   height: "38px",
                   minWidth: "100px",

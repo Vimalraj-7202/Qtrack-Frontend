@@ -19,19 +19,27 @@ interface AuthState {
   data: any;
 }
 
-// Helper to get item from localStorage safely
-const getLocalItem = (key: string) =>
-  typeof window !== "undefined" ? localStorage.getItem(key) : null;
+const getLocalItem = (key: string): any => {
+  if (typeof window === "undefined") return null;
+
+  const item = localStorage.getItem(key);
+
+  if (!item || item === "undefined") return null;
+
+  try {
+    return JSON.parse(item);
+  } catch {
+    return null;
+  }
+};
 
 const initialState: AuthState = {
-  user: getLocalItem("user")
-    ? JSON.parse(getLocalItem("user") as string)
-    : null,
-  token: getLocalItem("token"),
+  user: getLocalItem("user"),
+  token: localStorage.getItem("token") || null,
   users: [],
   loading: false,
   error: null,
-  isAuthenticated: !!getLocalItem("token"),
+  isAuthenticated: !!localStorage.getItem("token"),
   data: null,
 };
 
