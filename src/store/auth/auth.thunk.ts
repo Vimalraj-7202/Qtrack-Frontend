@@ -1,26 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { authService } from "@/lib/auth.management";
 
-//login
+// LOGIN
 export const login = createAsyncThunk(
   "auth/login",
   async (payload: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const { data } = await authService.loginUser(payload);
-      if (data?.token) {
-        localStorage.setItem("token", data.token);
-      }
-      if (data?.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-      }
-      return data;
+      const { token, ...user } = data || {};
+      if (!token) throw new Error("Token missing in response");
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      return { user, token };
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || "Login failed");
     }
   }
 );
 
-//register
+// REGISTER
 export const register = createAsyncThunk(
   "auth/register",
   async (
@@ -29,7 +27,14 @@ export const register = createAsyncThunk(
   ) => {
     try {
       const { data } = await authService.registerUser(payload);
-      return data;
+      const { token, ...user } = data || {};
+
+      if (!token) throw new Error("Token missing in response");
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      return { user, token };
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message || "Registration failed"

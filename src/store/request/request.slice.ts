@@ -2,9 +2,10 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { newRequest, getAllRequests } from "./request.thunk";
 
 interface Request {
+  period: string;
   name: string;
   _id: string;
-  FYEAR: string;
+  Fyear: string;
   Month: number;
   QC: string;
   Plant: string;
@@ -24,7 +25,7 @@ interface RequestState {
 
 const initialState: RequestState = {
   loading: false,
-  data:[],
+  data: [],
   error: null,
 };
 
@@ -55,10 +56,11 @@ const requestSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-    .addCase(getAllRequests.fulfilled, (state, action: PayloadAction<Request[]>) => {
+     .addCase(getAllRequests.fulfilled, (state, action: PayloadAction<Request[]>) => {
   state.loading = false;
-  state.data = action.payload;
+  state.data = action.payload; // payload is the array
 })
+
 
       .addCase(getAllRequests.rejected, (state, action) => {
         state.loading = false;

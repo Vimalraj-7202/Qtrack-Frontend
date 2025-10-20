@@ -21,7 +21,7 @@ export const newRequest = createAsyncThunk(
   ) => {
     try {
       const response = await requestService.newRequest(payload);
-      return response.data;
+      return response.data.data;
     } catch (error: any) {
       return rejectWithValue(
         error?.response?.data?.message || "Failed to get response"
@@ -33,13 +33,15 @@ export const newRequest = createAsyncThunk(
 //getAllRequest
 export const getAllRequests = createAsyncThunk(
   "request/getall",
-  async (_, {rejectWithValue}) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await requestService.getAllRequests();
-      return response;
+      const requests = Array.isArray(response.data) ? response.data : [];
+      return requests;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data?.message || "Failed to get response");
     }
   }
 );
+
 

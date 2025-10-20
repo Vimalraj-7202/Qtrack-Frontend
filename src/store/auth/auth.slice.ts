@@ -75,17 +75,16 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(
-      login.fulfilled,
-      (state, action: PayloadAction<{ user: User; token: string }>) => {
-        state.loading = false;
-        const { user, token } = action.payload;
-        state.user = user;
-        state.token = token;
-        state.isAuthenticated = true;
-  
-      }
-    );
+   builder.addCase(
+  login.fulfilled,
+  (state, action: PayloadAction<{ user: User; token: string }>) => {
+    state.loading = false;
+    const { user, token } = action.payload;
+    state.user = user;
+    state.token = token;
+    state.isAuthenticated = true;
+  }
+)
     builder.addCase(login.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Login failed";
@@ -96,17 +95,16 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(
-      register.fulfilled,
-      (state, action: PayloadAction<{ user: User; token: string }>) => {
-        state.loading = false;
-        const { user, token } = action.payload;
-        state.user = user;
-        state.token = token;
-        state.isAuthenticated = true;
-      
-      }
-    );
+   builder.addCase(
+  register.fulfilled,
+  (state, action: PayloadAction<{ user: User; token: string }>) => {
+    state.loading = false;
+    const { user, token } = action.payload;
+    state.user = user;
+    state.token = token;
+    state.isAuthenticated = true;
+  }
+);
     builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message || "Registration failed";
