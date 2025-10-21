@@ -79,7 +79,7 @@ const MyRequest = () => {
             borderRadius: 2,
             overflowX: "auto",
             overflowY: "auto",
-            height: "300px",
+            height: "400px",
             mt: 2,
             "&::-webkit-scrollbar": {
               width: "6px",
@@ -102,7 +102,7 @@ const MyRequest = () => {
                     key={header}
                     sx={{
                       fontWeight: 600,
-                      color: "#555",
+                      color: "gray",
                       paddingY: 1,
                       paddingX: 2,
                       textAlign: "center",
@@ -111,7 +111,7 @@ const MyRequest = () => {
                       borderRight:
                         idx !== headers.length - 1
                           ? "1px solid #e0e0e0"
-                          : "none", // vertical line between columns
+                          : "none",
                       whiteSpace: "nowrap",
                     }}
                   >
@@ -143,14 +143,14 @@ const MyRequest = () => {
                         borderRight:
                           idx !== headers.length - 1
                             ? "1px solid #e0e0e0"
-                            : "none", 
+                            : "none",
                         whiteSpace: "nowrap",
                         verticalAlign: "middle",
                       }}
                     >
                       {header === "Action" ? (
                         <IconButton onClick={() => handleView(req._id)}>
-                          <VisibilityIcon sx={{color:"#00b894"}} />
+                          <VisibilityIcon sx={{ color: "#00b894" }} />
                         </IconButton>
                       ) : (
                         <TextField
@@ -165,7 +165,15 @@ const MyRequest = () => {
                               fontSize: 14,
                               padding: 0,
                               textAlign: "center",
-                              color: "#333",
+                              color: "black",
+                              "& .MuiInputBase-input": {
+                                textAlign: "center",
+                                color: "black",
+                              },
+                              "& .MuiInputBase-input.Mui-disabled": {
+                                WebkitTextFillColor: "black",
+                                opacity: 1,
+                              },
                             },
                           }}
                         />

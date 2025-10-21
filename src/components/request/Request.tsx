@@ -72,7 +72,6 @@ const Request = () => {
     dispatch(getAllRequests() as any);
   }, [dispatch]);
 
-
   // Enable editing
   const handleNewRequest = () => setEditable(true);
 
@@ -104,7 +103,7 @@ const Request = () => {
     // Map frontend state to backend schema
     const payload = {
       Fyear: newRow.FYEAR,
-      month: newRow.Month,
+      Month: newRow.Month,
       QC: newRow.QC,
       Plant: newRow.Plant,
       Division: newRow.Division,
@@ -126,6 +125,7 @@ const Request = () => {
 
     await dispatch(newRequest(payload as any));
     handleCancel(); // reset form after submission
+    dispatch(getAllRequests() as any);
   };
 
   // Drag & Drop handlers
@@ -247,6 +247,10 @@ const Request = () => {
                           height: "100%",
                           color: editable ? "black" : "gray",
                           backgroundColor: "transparent",
+                          "& .MuiInputBase-input": {
+                            textAlign: "center",
+                            color: "black",
+                          },
                         },
                       }}
                     />
