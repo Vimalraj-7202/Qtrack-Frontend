@@ -2,20 +2,12 @@ import CommonTitle from "@/common/Title";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { getAllRequests } from "@/store/request/request.thunk";
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import {Box,Table,TableHead,TableRow,TableCell,TableBody,IconButton,TextField,Typography } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
 
 const MyRequest = () => {
+  const navigate=useNavigate();
   const dispatch = useAppDispatch();
   const requests = useAppSelector((state) => state.request.data);
   const loading = useAppSelector((state) => state.request.loading);
@@ -26,20 +18,16 @@ const MyRequest = () => {
     dispatch(getAllRequests() as any);
   }, [dispatch]);
 
-  const handleInputChange = (key: string, value: any) => {};
+const handleView = (id: string) => {
+  navigate(`view/${id}`);
+};
 
-  const handleView = (id: string) => {
-    console.log("View request by ID:", id);
-  };
 
   if (loading) return <Typography>Loading...</Typography>;
 
   const headers = [
     "FYear",
-    "Period",
-    "QC",
-    "Plant",
-    "Division",
+    "Month",
     "Category",
     "QTCode",
     "Location",
@@ -50,10 +38,7 @@ const MyRequest = () => {
 
   const headerKeyMap: Record<string, string> = {
     FYear: "Fyear",
-    Period: "Month",
-    QC: "QC",
-    Plant: "Plant",
-    Division: "Division",
+    Month: "Month",
     Category: "Category",
     QTCode: "QTCode",
     Location: "Location",
@@ -80,39 +65,24 @@ const MyRequest = () => {
             overflowX: "auto",
             overflowY: "auto",
             height: "400px",
-            mt: 2,
-            "&::-webkit-scrollbar": {
-              width: "6px",
-              height: "6px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#c1c1c1",
-              borderRadius: 3,
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#f0f0f0",
-            },
+            mt:3
           }}
         >
-          <Table sx={{ borderCollapse: "collapse", minWidth: "1400px" }}>
+          <Table sx={{ borderCollapse: "collapse", minWidth: "800px" }}>
             <TableHead>
-              <TableRow sx={{ backgroundColor: "#f9f9f9" }}>
-                {headers.map((header, idx) => (
+              <TableRow sx={{ backgroundColor: "#eaeff4" }}>
+                {headers.map((header) => (
                   <TableCell
                     key={header}
                     sx={{
-                      fontWeight: 600,
-                      color: "gray",
-                      paddingY: 1,
-                      paddingX: 2,
+                      color: "black",
+                      paddingY: 0.6,
+                      paddingX: 0.8,
                       textAlign: "center",
-                      minWidth: 120,
+                      minWidth: 50,
                       borderBottom: "2px solid #e0e0e0",
-                      borderRight:
-                        idx !== headers.length - 1
-                          ? "1px solid #e0e0e0"
-                          : "none",
                       whiteSpace: "nowrap",
+                      fontSize: 13,
                     }}
                   >
                     {header}
@@ -123,34 +93,24 @@ const MyRequest = () => {
 
             <TableBody>
               {requests.map((req) => (
-                <TableRow
-                  key={req._id}
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  {headers.map((header, idx) => (
+                <TableRow key={req._id} sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}>
+                  {headers.map((header) => (
                     <TableCell
                       key={header}
                       sx={{
-                        paddingY: 0.8,
-                        paddingX: 1.5,
+                        paddingY: 0.5,
+                        paddingX: 0.8,
                         textAlign: "center",
-                        minWidth: 100,
+                        minWidth: 50,
                         borderBottom: "1px solid #e0e0e0",
-                        borderRight:
-                          idx !== headers.length - 1
-                            ? "1px solid #e0e0e0"
-                            : "none",
                         whiteSpace: "nowrap",
                         verticalAlign: "middle",
+                        fontSize: 12,
                       }}
                     >
                       {header === "Action" ? (
-                        <IconButton onClick={() => handleView(req._id)}>
-                          <VisibilityIcon sx={{ color: "#00b894" }} />
+                        <IconButton onClick={() => handleView(req._id)} size="small">
+                          <VisibilityIcon sx={{ color: "#00b894", fontSize: 20 }} />
                         </IconButton>
                       ) : (
                         <TextField
@@ -162,16 +122,16 @@ const MyRequest = () => {
                           InputProps={{
                             disableUnderline: true,
                             sx: {
-                              fontSize: 14,
+                              fontSize: 12,
                               padding: 0,
                               textAlign: "center",
-                              color: "black",
+                              color: "#7b838c",
                               "& .MuiInputBase-input": {
                                 textAlign: "center",
-                                color: "black",
+                                color: "#7b838c",
                               },
                               "& .MuiInputBase-input.Mui-disabled": {
-                                WebkitTextFillColor: "black",
+                                WebkitTextFillColor: "#7b838c",
                                 opacity: 1,
                               },
                             },

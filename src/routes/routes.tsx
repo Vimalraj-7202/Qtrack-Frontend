@@ -23,6 +23,8 @@ const RequestStatusPage = SuspenseWrapper(
   lazy(() => import("@/pages/requeststatus/RequestStatusPage"))
 );
 
+const ViewPage=SuspenseWrapper(lazy(()=>import("@/pages/myrequests/ViewPage")))
+
 const ReportsPage = SuspenseWrapper(
   lazy(() => import("@/pages/reports/ReportsPage"))
 );
@@ -46,6 +48,7 @@ const routes = [
           { path: "dashboard", element: <DashboardPage /> },
           { path: "request", element: <RequestPage /> },
           { path: "myrequests", element: <MyRequestPage /> },
+           { path: "myrequests/view/:id", element: <ViewPage /> },
           { path: "escalation", element: <EscalationPage /> },
           { path: "requeststatus", element: <RequestStatusPage /> },
           { path: "reports", element: <ReportsPage /> },
