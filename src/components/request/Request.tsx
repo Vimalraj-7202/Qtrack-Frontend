@@ -1,5 +1,5 @@
 import CommonTitle from "@/common/Title";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { useAppDispatch, useAppSelector, type RootState } from "@/store/store";
 import { newRequest, getAllRequests } from "@/store/request/request.thunk";
 import {
@@ -68,10 +68,7 @@ const Request = () => {
   const [showUploadSection, setShowUploadSection] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
-  useEffect(() => {
-    dispatch(getAllRequests() as any);
-  }, [dispatch]);
-
+ 
   // Enable editing
   const handleNewRequest = () => setEditable(true);
 
@@ -124,7 +121,7 @@ const Request = () => {
     }
 
     await dispatch(newRequest(payload as any));
-    handleCancel(); // reset form after submission
+    handleCancel();
     dispatch(getAllRequests() as any);
   };
 
@@ -196,6 +193,7 @@ const Request = () => {
                       paddingY: 0.5,
                       paddingX: 1,
                       textAlign: "center",
+                      backgroundColor:"#eaeff4",
                       borderRight:
                         idx !== headers.length - 1
                           ? "1px solid #e0e0e0"

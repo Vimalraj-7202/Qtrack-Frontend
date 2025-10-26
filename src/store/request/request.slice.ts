@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { newRequest, getAllRequests } from "./request.thunk";
+import { newRequest, getAllRequests, getRequestById } from "./request.thunk";
 
 interface Request {
   period: string;
@@ -20,12 +20,14 @@ interface Request {
 interface RequestState {
   loading: boolean;
   data: Request[];
+  request: any;
   error: string | null;
 }
 
 const initialState: RequestState = {
   loading: false,
   data: [],
+  request: null,
   error: null,
 };
 
@@ -56,13 +58,29 @@ const requestSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-     .addCase(getAllRequests.fulfilled, (state, action: PayloadAction<Request[]>) => {
-  state.loading = false;
-  state.data = action.payload; // payload is the array
-})
-
+      .addCase(
+        getAllRequests.fulfilled,
+        (state, action: PayloadAction<Request[]>) => {
+          state.loading = false;
+          state.data = action.payload;
+        }
+      )
 
       .addCase(getAllRequests.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      .addCase(getRequestById.pending, (state: any) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getRequestById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.request = action.payload;
+      })
+
+      .addCase(getRequestById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

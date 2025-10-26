@@ -44,4 +44,17 @@ export const getAllRequests = createAsyncThunk(
   }
 );
 
+//getRequestById
+export const getRequestById = createAsyncThunk(
+  "request/getById",
+  async (id:any, { rejectWithValue }) => {
+    try {
+      const response = await requestService.getRequestbyId(id);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data?.message || "Failed to get response");
+    }
+  }
+);
+
 

@@ -6,3 +6,4 @@ export const LOGIN='/login';
 //Request
 export const NEW_REQUEST='/newRequest';
 export const GETALL_REQUEST='/getAllRequests';
+export const GETREQUEST_BYID='/getRequest';
