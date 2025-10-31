@@ -1,5 +1,5 @@
 import CommonTitle from "@/common/Title";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppDispatch, useAppSelector, type RootState } from "@/store/store";
 import { getAllRequests } from "@/store/request/request.thunk";
 import { useEffect, useState } from "react";
 import {Box,Table,TableHead,TableRow,TableCell,TableBody,IconButton,TextField,Typography } from "@mui/material";
@@ -9,9 +9,8 @@ import { useNavigate } from "react-router-dom";
 const MyRequest = () => {
   const navigate=useNavigate();
   const dispatch = useAppDispatch();
-  const requests = useAppSelector((state) => state.request.data);
-  const loading = useAppSelector((state) => state.request.loading);
-
+  const requests = useAppSelector((state:RootState) => state.request.data);
+  const loading = useAppSelector((state:RootState) => state.request.loading);
   const [editable, setEditable] = useState(false);
   console.log(setEditable)
 

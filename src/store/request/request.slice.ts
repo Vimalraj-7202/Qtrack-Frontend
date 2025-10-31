@@ -1,5 +1,9 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { newRequest, getAllRequests, getRequestById } from "./request.thunk";
+import {
+  newRequest,
+  getAllRequests,
+  getRequestById,
+} from "./request.thunk";
 
 interface Request {
   period: string;
@@ -17,18 +21,19 @@ interface Request {
   Amount: number;
 }
 
+ 
 interface RequestState {
   loading: boolean;
   data: Request[];
   request: any;
-  error: string | null;
+  error: string | null
 }
 
 const initialState: RequestState = {
   loading: false,
   data: [],
   request: null,
-  error: null,
+  error: null
 };
 
 const requestSlice = createSlice({
@@ -83,7 +88,7 @@ const requestSlice = createSlice({
       .addCase(getRequestById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
   },
 });
 

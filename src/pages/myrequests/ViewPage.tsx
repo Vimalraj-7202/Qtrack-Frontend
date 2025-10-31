@@ -59,7 +59,7 @@ const ViewPage = () => {
     <Box>
       <Box sx={{ width: "100%" }}>
         {/* Header with Back Button */}
-        <Box sx={{ mb: 3 }}>
+        <Box>
           <Button
             onClick={handleBack}
             startIcon={<ArrowBackIcon />}
@@ -104,8 +104,7 @@ const ViewPage = () => {
                 color: "#1d1d1f",
                 fontSize: "28px",
                 fontWeight: 600,
-                letterSpacing: "-0.5px",
-                mb: 1,
+                letterSpacing: "-0.5px"
               }}
             >
               Request Details

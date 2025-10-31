@@ -1,13 +1,13 @@
 import { createAsyncThunk} from "@reduxjs/toolkit";
 import { requestService } from "@/lib/request.management";
-
+ 
 //new request
 export const newRequest = createAsyncThunk(
   "request/create",
   async (
     payload: {
       FYEAR: string;
-      Month:number;
+      Month: number;
       QC: string;
       Plant: string;
       Division: string;
@@ -39,7 +39,9 @@ export const getAllRequests = createAsyncThunk(
       const requests = Array.isArray(response.data) ? response.data : [];
       return requests;
     } catch (error: any) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to get response");
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to get response"
+      );
     }
   }
 );
@@ -47,14 +49,16 @@ export const getAllRequests = createAsyncThunk(
 //getRequestById
 export const getRequestById = createAsyncThunk(
   "request/getById",
-  async (id:any, { rejectWithValue }) => {
+  async (id: any, { rejectWithValue }) => {
     try {
       const response = await requestService.getRequestbyId(id);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error?.response?.data?.message || "Failed to get response");
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to get response"
+      );
     }
   }
 );
 
-
+ 
