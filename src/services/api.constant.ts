@@ -7,3 +7,6 @@ export const LOGIN='/login';
 export const NEW_REQUEST='/newRequest';
 export const GETALL_REQUEST='/getAllRequests';
 export const GETREQUEST_BYID='/getRequest';
+
+//report
+export const OVERALLREPORT='/overallReport';
