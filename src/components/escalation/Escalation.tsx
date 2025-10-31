@@ -84,7 +84,7 @@ const Escalation = () => {
           component={Paper}
           ref={tableContainerRef}
           sx={{
-            maxHeight: 580,
+            maxHeight: 500,
             overflow: "auto",
             border: "1px solid #e2e8f0",
             borderRadius: 2,
