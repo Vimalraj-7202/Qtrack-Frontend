@@ -2,18 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import CommonTitle from "@/common/Title";
 import { useAppDispatch, useAppSelector, type RootState } from "@/store/store";
 import { getOverallReports } from "@/store/report/report.thunk";
-import {
-  Box,
-  CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-} from "@mui/material";
+import {Box,CircularProgress,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Typography} from "@mui/material";
 import Nodata from "@/assets/nodata.jpg";
 
 const Escalation = () => {
@@ -57,7 +46,6 @@ const Escalation = () => {
     if (reportloading || delayedLoading || !hasNext) return;
     setDelayedLoading(true);
     await new Promise((res) => setTimeout(res, 3000)); // wait 3 sec
-
     const nextPage = pageNo + 1;
     setPageNo(nextPage);
     dispatch(getOverallReports({ userId: "", pageNo: nextPage, pageSize: 10 }));
@@ -68,7 +56,6 @@ const Escalation = () => {
   const handleScroll = useCallback(() => {
     const container = tableContainerRef.current;
     if (!container || reportloading || delayedLoading || !hasNext) return;
-
     const { scrollTop, scrollHeight, clientHeight } = container;
     if (scrollHeight - scrollTop - clientHeight < 80) {
       loadMoreData();
@@ -114,12 +101,13 @@ const Escalation = () => {
                       textTransform: "capitalize",
                       backgroundColor: "#eaeff4",
                       textAlign: "center",
+                      padding:"8px 8px",
                       width:
                         i === 0
                           ? "20%" 
                           : i === 1
                           ? "40%" 
-                          : "40%"
+                          : "40%",
                     }}
                   >
                     {header}
