@@ -1,28 +1,36 @@
 import CommonTitle from "@/common/Title";
-import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useAppDispatch, useAppSelector, type RootState } from "@/store/store";
 import { getAllRequests } from "@/store/request/request.thunk";
 import { useEffect, useState } from "react";
-import {Box,Table,TableHead,TableRow,TableCell,TableBody,IconButton,TextField,Typography } from "@mui/material";
+import {
+  Box,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 
 const MyRequest = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const requests = useAppSelector((state) => state.request.data);
+  const requests = useAppSelector((state: RootState) => state.request.data);
   const loading = useAppSelector((state) => state.request.loading);
-
   const [editable, setEditable] = useState(false);
-  console.log(setEditable)
+  console.log(setEditable);
 
   useEffect(() => {
     dispatch(getAllRequests() as any);
   }, [dispatch]);
 
-const handleView = (id: string) => {
-  navigate(`view/${id}`);
-};
-
+  const handleView = (id: string) => {
+    navigate(`view/${id}`);
+  };
 
   if (loading) return <Typography>Loading...</Typography>;
 
@@ -66,7 +74,7 @@ const handleView = (id: string) => {
             overflowX: "auto",
             overflowY: "auto",
             height: "400px",
-            mt:3
+            mt: 3,
           }}
         >
           <Table sx={{ borderCollapse: "collapse", minWidth: "800px" }}>
@@ -94,7 +102,10 @@ const handleView = (id: string) => {
 
             <TableBody>
               {requests.map((req) => (
-                <TableRow key={req._id} sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}>
+                <TableRow
+                  key={req._id}
+                  sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}
+                >
                   {headers.map((header) => (
                     <TableCell
                       key={header}
@@ -110,8 +121,13 @@ const handleView = (id: string) => {
                       }}
                     >
                       {header === "Action" ? (
-                        <IconButton onClick={() => handleView(req._id)} size="small">
-                          <VisibilityIcon sx={{ color: "#00b894", fontSize: 20 }} />
+                        <IconButton
+                          onClick={() => handleView(req._id)}
+                          size="small"
+                        >
+                          <VisibilityIcon
+                            sx={{ color: "#00b894", fontSize: 20 }}
+                          />
                         </IconButton>
                       ) : (
                         <TextField

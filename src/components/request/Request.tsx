@@ -1,19 +1,8 @@
 import CommonTitle from "@/common/Title";
 import {useState } from "react";
-import { useAppDispatch, useAppSelector, type RootState } from "@/store/store";
+import { useAppDispatch} from "@/store/store";
 import { newRequest, getAllRequests } from "@/store/request/request.thunk";
-import {
-  Box,
-  Button,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TextField,
-  Paper,
-  Typography,
-} from "@mui/material";
+import {Box,Button,Table,TableHead,TableBody,TableRow,TableCell,TextField,Paper,Typography} from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 // Type for a single row
@@ -60,8 +49,8 @@ const initialRowState: RequestRow = {
 
 const Request = () => {
   const dispatch = useAppDispatch();
-  const data = useAppSelector((state: RootState) => state.request);
-  console.log(data, "dataaaaaaa");
+
+
   const [newRow, setNewRow] = useState<RequestRow>({ ...initialRowState });
   const [editable, setEditable] = useState(false);
   const [isContinueEnabled, setIsContinueEnabled] = useState(false);
