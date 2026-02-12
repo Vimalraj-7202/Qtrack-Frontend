@@ -5,7 +5,6 @@ import { PublicRoute } from "./PublicRoute";
 import Layout from "@/layouts/Layout";
 import SuspenseWrapper from "@/common/suspense/SuspenseWrapper";
 
-
 const LoginPage = SuspenseWrapper(lazy(() => import("@/pages/auth/LoginPage")));
 const DashboardPage = SuspenseWrapper(
   lazy(() => import("@/pages/dashboard/DasboardPage"))
@@ -23,11 +22,13 @@ const RequestStatusPage = SuspenseWrapper(
   lazy(() => import("@/pages/requeststatus/RequestStatusPage"))
 );
 
-const ViewPage=SuspenseWrapper(lazy(()=>import("@/pages/myrequests/ViewPage")))
+ 
 
 const ReportsPage = SuspenseWrapper(
   lazy(() => import("@/pages/reports/ReportsPage"))
 );
+
+ 
 const NotificationsPage = SuspenseWrapper(
   lazy(() => import("@/pages/notifications/NotificationPage"))
 );
@@ -35,7 +36,9 @@ const SettingsPage = SuspenseWrapper(
   lazy(() => import("@/pages/settings/SettingsPage"))
 );
 
-const UnAuthorizedPage=SuspenseWrapper(lazy(()=>import("@/pages/unauthorized/UnAuthorizedPage")))
+const UnAuthorizedPage = SuspenseWrapper(
+  lazy(() => import("@/pages/unauthorized/UnAuthorizedPage"))
+);
 
 const routes = [
   {
@@ -48,14 +51,12 @@ const routes = [
           { path: "dashboard", element: <DashboardPage /> },
           { path: "request", element: <RequestPage /> },
           { path: "myrequests", element: <MyRequestPage /> },
-           { path: "myrequests/view/:id", element: <ViewPage /> },
           { path: "escalation", element: <EscalationPage /> },
           { path: "requeststatus", element: <RequestStatusPage /> },
           { path: "reports", element: <ReportsPage /> },
           { path: "notifications", element: <NotificationsPage /> },
           { path: "settings", element: <SettingsPage /> },
           { path: "*", element: <UnAuthorizedPage /> },
-          
         ],
       },
     ],
